@@ -74,10 +74,14 @@ class LinkedList():
 
     def delete(self, value):
         """
-        Deletes first instance of value
+        Deletes first instance of value, returns -1 if value not in linked list
         """
+        if self.tail.data == value and self.head.data != value:
+            self.tail.parent.child = None
+            self.tail = self.tail.parent
+
         current = self.head
-        while current.child:
+        while current:
             if current.data == value:
                 if current.parent:
                     current.parent.child = current.child
@@ -90,13 +94,36 @@ class LinkedList():
                 break
             else:
                 current = current.child
-        if self.tail.data == value:
-            self.tail.parent.child = None
-            self.tail = self.tail.parent
+
+            if current.child == None:
+                # return -1
+                raise IndexError(f"{value} not in liked list")
+
+    def index(self, value):
+        """ Returns index of value. Returns -1 in value not in linked list. Alt: Prints not in list"""
+        if self.head:
+            current = self.head
+        else:
+            # return -1
+            return "f{value} not in linked list"
+        count = 0
+        while True:
+            if current.data == value:
+                return count
+            elif current.child:
+                count += 1
+                current = current.child
+            else:
+                # return -1
+                return "f{value} not in linked list"
+
 
     def __repr__(self):
         rep = []
-        current = self.head
+        if self.head:
+            current = self.head
+        else:
+            return "Linked list empty"
         while current.child:
             rep.append(current)
             current = current.child
@@ -114,11 +141,9 @@ N4 = Node(25)
 LL = LinkedList()
 LL.add_to_head(N1)
 LL.add_to_head(N2)
-LL.add_to_tail(N3)
-LL.delete(20)
-LL.add_to_tail(N4)
-LL.add_to_head(N2)
-print(LL, "\n", N1, N2, N3, N4)
+# LL.add_to_head(N2)
+LL.index(10)
+print(LL, "\n", N1, N2, N3, N4, "\n", LL.index(10))
 
 
 
